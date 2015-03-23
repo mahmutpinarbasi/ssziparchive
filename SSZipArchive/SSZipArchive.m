@@ -29,28 +29,30 @@
 
 #pragma mark - Unzipping
 
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestination:(NSString *)destination {
-	return [self unzipFileAtPath:path toDestination:destination delegate:nil];
-}
-
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestinationPath:(NSString *)destinationPath{
-    return [self unzipFileAtPath:path toDestination:destinationPath overwrite:YES password:nil error:nil delegate:nil containsFullPath:YES];
++ (BOOL)unzipFileAtPath:(NSString *)path
+          toDestination:(NSString *)destination
+       containsFullPath:(BOOL)containsFullPath {
+    
+	return [self unzipFileAtPath:path toDestination:destination delegate:nil containsFullPath:containsFullPath];
     
 }
+
 
 + (BOOL)unzipFileAtPath:(NSString *)path
           toDestination:(NSString *)destination
               overwrite:(BOOL)overwrite
                password:(NSString *)password
+       containsFullPath:(BOOL)containsFullPath
                   error:(NSError **)error {
     
-	return [self unzipFileAtPath:path toDestination:destination overwrite:overwrite password:password error:error delegate:nil containsFullPath:NO];
+	return [self unzipFileAtPath:path toDestination:destination overwrite:overwrite password:password error:error delegate:nil containsFullPath:containsFullPath];
 }
 
 
 + (BOOL)unzipFileAtPath:(NSString *)path
           toDestination:(NSString *)destination
-               delegate:(id<SSZipArchiveDelegate>)delegate {
+               delegate:(id<SSZipArchiveDelegate>)delegate
+       containsFullPath:(BOOL)containsFullPath{
     
 	return [self unzipFileAtPath:path toDestination:destination overwrite:YES password:nil error:nil delegate:delegate containsFullPath:NO];
 }

@@ -17,22 +17,30 @@
 @interface SSZipArchive : NSObject
 
 // Unzip
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestination:(NSString *)destination;
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestination:(NSString *)destination overwrite:(BOOL)overwrite password:(NSString *)password error:(NSError **)error;
++ (BOOL)unzipFileAtPath:(NSString *)path
+          toDestination:(NSString *)destination
+       containsFullPath:(BOOL)containsFullPath;
 
-/**
- *  The diffence between between 'unzipFileAtPath:toDestionation' and this method is, this one contains full path for the file. But the other one just containes the 
- *  parent directory's path. Thus we are not able to set the file name we want to set.
- *
- *  @param path            The zipped file path
- *  @param destinationPath The unzipped file path
- *
- *  @return YES if succeeds, NO if fails.
- */
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestinationPath:(NSString *)destinationPath;
++ (BOOL)unzipFileAtPath:(NSString *)path
+          toDestination:(NSString *)destination
+              overwrite:(BOOL)overwrite
+               password:(NSString *)password
+       containsFullPath:(BOOL)containsFullPath
+                  error:(NSError **)error;
 
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestination:(NSString *)destination delegate:(id<SSZipArchiveDelegate>)delegate;
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestination:(NSString *)destination overwrite:(BOOL)overwrite password:(NSString *)password error:(NSError **)error delegate:(id<SSZipArchiveDelegate>)delegate containsFullPath:(BOOL)containsFullPath;
+
++ (BOOL)unzipFileAtPath:(NSString *)path
+          toDestination:(NSString *)destination
+               delegate:(id<SSZipArchiveDelegate>)delegate
+       containsFullPath:(BOOL)containsFullPath;
+
++ (BOOL)unzipFileAtPath:(NSString *)path
+          toDestination:(NSString *)destination
+              overwrite:(BOOL)overwrite
+               password:(NSString *)password
+                  error:(NSError **)error
+               delegate:(id<SSZipArchiveDelegate>)delegate
+       containsFullPath:(BOOL)containsFullPath;
 
 // Zip
 + (BOOL)createZipFileAtPath:(NSString *)path withFilesAtPaths:(NSArray *)filenames;
