@@ -33,18 +33,37 @@
 	return [self unzipFileAtPath:path toDestination:destination delegate:nil];
 }
 
++ (BOOL)unzipFileAtPath:(NSString *)path toDestinationPath:(NSString *)destinationPath{
+    return [self unzipFileAtPath:path toDestination:destinationPath overwrite:YES password:nil error:nil delegate:nil containsFullPath:YES];
+    
+}
 
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestination:(NSString *)destination overwrite:(BOOL)overwrite password:(NSString *)password error:(NSError **)error {
-	return [self unzipFileAtPath:path toDestination:destination overwrite:overwrite password:password error:error delegate:nil];
++ (BOOL)unzipFileAtPath:(NSString *)path
+          toDestination:(NSString *)destination
+              overwrite:(BOOL)overwrite
+               password:(NSString *)password
+                  error:(NSError **)error {
+    
+	return [self unzipFileAtPath:path toDestination:destination overwrite:overwrite password:password error:error delegate:nil containsFullPath:NO];
 }
 
 
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestination:(NSString *)destination delegate:(id<SSZipArchiveDelegate>)delegate {
-	return [self unzipFileAtPath:path toDestination:destination overwrite:YES password:nil error:nil delegate:delegate];
++ (BOOL)unzipFileAtPath:(NSString *)path
+          toDestination:(NSString *)destination
+               delegate:(id<SSZipArchiveDelegate>)delegate {
+    
+	return [self unzipFileAtPath:path toDestination:destination overwrite:YES password:nil error:nil delegate:delegate containsFullPath:NO];
 }
 
 
-+ (BOOL)unzipFileAtPath:(NSString *)path toDestination:(NSString *)destination overwrite:(BOOL)overwrite password:(NSString *)password error:(NSError **)error delegate:(id<SSZipArchiveDelegate>)delegate {
++ (BOOL)unzipFileAtPath:(NSString *)path
+          toDestination:(NSString *)destination
+              overwrite:(BOOL)overwrite
+               password:(NSString *)password
+                  error:(NSError **)error
+               delegate:(id<SSZipArchiveDelegate>)delegate
+       containsFullPath:(BOOL)containsFullPath{
+    
 	// Begin opening
 	zipFile zip = unzOpen((const char*)[path UTF8String]);
 	if (zip == NULL) {
@@ -152,13 +171,21 @@
 				isDirectory = YES;
 			}
 			free(filename);
-
+            
+            
 			// Contains a path
 			if ([strPath rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"/\\"]].location != NSNotFound) {
 				strPath = [strPath stringByReplacingOccurrencesOfString:@"\\" withString:@"/"];
 			}
 
-			NSString *fullPath = [destination stringByAppendingPathComponent:strPath];
+            
+            NSString * fullPath;
+            if (containsFullPath) {
+                fullPath = destination;
+            }else{
+                fullPath = [destination stringByAppendingPathComponent:strPath];
+            }
+            
 			NSError *err = nil;
 	        NSDate *modDate = [[self class] _dateWithMSDOSFormat:(UInt32)fileInfo.dosDate];
 	        NSDictionary *directoryAttr = [NSDictionary dictionaryWithObjectsAndKeys:modDate, NSFileCreationDate, modDate, NSFileModificationDate, nil];
