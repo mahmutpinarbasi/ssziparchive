@@ -54,7 +54,7 @@
                delegate:(id<SSZipArchiveDelegate>)delegate
        containsFullPath:(BOOL)containsFullPath{
     
-	return [self unzipFileAtPath:path toDestination:destination overwrite:YES password:nil error:nil delegate:delegate containsFullPath:NO];
+	return [self unzipFileAtPath:path toDestination:destination overwrite:YES password:nil error:nil delegate:delegate containsFullPath:containsFullPath];
 }
 
 
